@@ -1,6 +1,34 @@
 from tkinter import *
+from db import Database
+
+db = Database('store.db')
+
+
+
+def populate_list():
+    parts_list.delete(0, END)
+    for row in db.fetch():
+            parts_list.insert(END, row)
+
+def add_item():
+    db.insert(part_text.get(), customer_text.get(), retailer_text.get(), price_text.get())
+    parts_list.delete(0, END)
+    parts_list.insert(END, (part_text.get(), customer_text.get(), retailer_text.get(), price_text.get()) )
+    populate_list()
+
+def remove_item():
+    print("Remove")
+
+def update_item():
+    print("Update") 
+
+def clear_item():
+    print("Clear")       
+
 
 app = Tk()
+
+
 
 part_text = StringVar()
 part_label = Label(app, text='Part Name', font=('bold', 12), pady=20)
@@ -37,14 +65,20 @@ scrollbar.grid(row=3, column=3)
 parts_list.configure(yscrollcommand=scrollbar.set)
 scrollbar.configure(command=parts_list.yview)
 
+add_btn = Button(app, text='Add Parts' , width=12, command=add_item)
+add_btn.grid(row=2, column=0 ,pady=20)
+
 remove_btn = Button(app, text='Remove Parts' , width=12, command=remove_item)
-remove_btn.grid(row=2, column=1 ,pady=20)
+remove_btn.grid(row=2, column=1 )
 
 update_btn = Button(app, text='Update Parts' , width=12, command=update_item)
 update_btn.grid(row=2, column=2 )
 
 clear_btn = Button(app, text='Clear Parts' , width=12, command=clear_item)
 clear_btn.grid(row=2, column=3 )
+
+
+populate_list()
 
 
 
